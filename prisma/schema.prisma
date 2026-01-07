@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  role          String // "FARMER", "RETAILER", "ADMIN"
+  verified      Boolean  @default(false)
+  accountStatus String   @default("ACTIVE") // "ACTIVE", "SUSPENDED"
+  trustScore    Int      @default(50)
+  language      String   @default("en")
+  createdAt     DateTime @default(now())
+
+  farmerProfile    Farmer?
+  retailerProfile  Retailer?
+  bids             Bid[]
+  violations       Violation[]
+  auditLogs        AuditLog[]
+  wallets          Wallet?
+  sentMessages     Message[]   @relation("SentMessages")
+  receivedMessages Message[]   @relation("ReceivedMessages")
+  reports          Report[]
+  notifications    Notification[]
+}
+
+model Report {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String // "WEBSITE_ISSUE", "USER_COMPLAINT_FARMER", "USER_COMPLAINT_RETAILER", "OTHER"
+  subject     String
+  description String
+  status      String   @default("PENDING") // "PENDING", "IN_PROGRESS", "RESOLVED"
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Farmer {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  crops  Crop[]
+}
+
+model Retailer {
+  id           String @id @default(uuid())
+  userId       String @unique
+  user         User   @relation(fields: [userId], references: [id])
+  businessName String
+  gstId        String
+}
+
+model Crop {
+  id                String        @id @default(uuid())
+  name              String
+  totalQuantity     Float
+  availableQuantity Float
+  qualityGrade      String // A, B, C
+  minPrice          Float
+  image             String?
+  biddingType       String // "BULK", "MINI"
+  status            String        @default("ACTIVE") // "ACTIVE", "SOLD"
+  biddingStatus     String        @default("ACTIVE") // "ACTIVE", "CLOSED"
+  biddingStartTime  DateTime      @default(now())
+  biddingEndTime    DateTime
+  scheduledStartTime String?    @default("09:00")
+  scheduledDuration  Int?        @default(8)
+  attemptNumber      Int         @default(1)
+  farmerId          String
+  farmer            Farmer        @relation(fields: [farmerId], references: [id])
+  bids              Bid[]
+  transactions      Transaction[]
+  pooledCrop        PooledCrop?   @relation(fields: [pooledCropId], references: [id])
+  pooledCropId      String?
+}
+
+model Bid {
+  id         String   @id @default(uuid())
+  cropId     String
+  crop       Crop     @relation(fields: [cropId], references: [id])
+  retailerId String
+  retailer   User     @relation(fields: [retailerId], references: [id])
+  quantity   Float
+  pricePerKg Float
+  timestamp  DateTime @default(now())
+  status     String   @default("PENDING") // "PENDING", "ACCEPTED", "REJECTED"
+}
+
+model Transaction {
+  id                String    @id @default(uuid())
+  cropId            String
+  crop              Crop      @relation(fields: [cropId], references: [id])
+  farmerId          String
+  retailerId        String
+  quantityPurchased Float
+  pricePerKg        Float
+  totalAmount       Float
+  timestamp         DateTime  @default(now())
+  orderStatus       String    @default("CONFIRMED") // "CONFIRMED", "DISPATCHED", "DELIVERED", "COMPLETED"
+  paymentStatus     String    @default("PENDING") // "PENDING", "INITIATED", "RECEIVED"
+  disputes          Dispute[]
+  chat              Chat?
+}
+
+model Dispute {
+  id            String      @id @default(uuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  reason        String
+  evidence      String?
+  status        String      @default("PENDING") // "PENDING", "RESOLVED"
+  result        String?
+}
+
+model Violation {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String
+  description String
+  timestamp   DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  details   String
+  timestamp DateTime @default(now())
+}
+
+model PooledCrop {
+  id     String @id @default(uuid())
+  name   String
+  crops  Crop[]
+  status String @default("ACTIVE")
+}
+
+model Wallet {
+  id           String              @id @default(uuid())
+  userId       String              @unique
+  user         User                @relation(fields: [userId], references: [id])
+  balance      Float               @default(0)
+  transactions WalletTransaction[]
+}
+
+model WalletTransaction {
+  id          String   @id @default(uuid())
+  walletId    String
+  wallet      Wallet   @relation(fields: [walletId], references: [id])
+  amount      Float
+  type        String // "CREDIT", "DEBIT"
+  description String
+  timestamp   DateTime @default(now())
+}
+
+model Chat {
+  id            String      @id @default(uuid())
+  transactionId String      @unique
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  messages      Message[]
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  chatId     String
+  chat       Chat     @relation(fields: [chatId], references: [id])
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  content    String
+  timestamp  DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
