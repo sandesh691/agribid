@@ -110,7 +110,8 @@ export default function FarmerLayout({
                 zIndex: 1000,
                 padding: '0 0.5rem'
             }}>
-                {navItems.slice(0, 4).map((item) => (
+                {/* Dashboard, Listings, Add, Income, Wallet */}
+                {[navItems[0], navItems[1], navItems[2], navItems[4]].map((item) => (
                     <Link
                         key={item.href}
                         href={item.href}
@@ -121,8 +122,9 @@ export default function FarmerLayout({
                             gap: '4px',
                             color: isActive(item.href) ? 'var(--primary-green)' : '#94a3b8',
                             textDecoration: 'none',
-                            fontSize: '0.7rem',
-                            fontWeight: isActive(item.href) ? '800' : '600'
+                            fontSize: '0.65rem',
+                            fontWeight: isActive(item.href) ? '800' : '600',
+                            flex: 1
                         }}
                     >
                         {item.icon}
@@ -144,10 +146,20 @@ export default function FarmerLayout({
                     boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <Link href="/" className="mobile-only" style={{ color: 'var(--primary-green)' }}>
+                                <Home size={20} />
+                            </Link>
                             <h1 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{t('farmer_dashboard_header')}</h1>
                         </div>
-                        <LanguageToggle />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <LanguageToggle />
+                            <form action="/api/auth/logout" method="POST" className="mobile-only">
+                                <button type="submit" style={{ background: 'transparent', border: 'none', color: '#ef4444', padding: '4px' }}>
+                                    <LogOut size={20} />
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </header>
 
