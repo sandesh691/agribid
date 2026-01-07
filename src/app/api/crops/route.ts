@@ -33,15 +33,22 @@ export async function POST(request: Request) {
             if (duration > 10) return NextResponse.json({ error: 'Maximum bidding duration is 10 hours' }, { status: 400 });
 
             const [hours, minutes] = (scheduledStartTime || '09:00').split(':').map(Number);
-            biddingStartTime.setHours(hours, minutes, 0, 0);
 
-            // If already past this time today, schedule for tomorrow
+            // Indian Standard Time (IST) is UTC + 5:30.
+            // To set the time in IST, we set it as UTC and then subtract 5 hours 30 minutes (330 minutes).
+            const targetDate = new Date();
+            targetDate.setUTCHours(hours, minutes, 0, 0);
+            targetDate.setMinutes(targetDate.getUTCMinutes() - 330);
+
+            biddingStartTime = targetDate;
+
+            // If the requested time has already passed today (in IST), schedule it for tomorrow
             if (biddingStartTime <= new Date()) {
-                biddingStartTime.setDate(biddingStartTime.getDate() + 1);
+                biddingStartTime.setUTCDate(biddingStartTime.getUTCDate() + 1);
             }
 
             biddingEndTime = new Date(biddingStartTime);
-            biddingEndTime.setHours(biddingEndTime.getHours() + duration);
+            biddingEndTime.setUTCHours(biddingEndTime.getUTCHours() + duration);
         } else {
             // MINI: Starts in 2h, lasts 4h
             biddingStartTime.setHours(biddingStartTime.getHours() + 2);
