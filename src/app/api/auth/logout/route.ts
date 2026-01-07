@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-export async function POST() {
+export async function POST(request: Request) {
     const cookieStore = await cookies();
-    cookieStore.delete('agribid-session');
-    return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'));
+    cookieStore.set('agribid-session', '', { path: '/', maxAge: 0 });
+    return NextResponse.redirect(new URL('/login', request.url));
 }
