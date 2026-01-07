@@ -77,7 +77,7 @@ function RegisterForm() {
                     <select
                         value={formData.role}
                         onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', outline: 'none' }}
+                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '2px solid #cbd5e1', outline: 'none', background: 'white', color: 'black' }}
                         suppressHydrationWarning
                     >
                         <option value="FARMER">{t('farmer')}</option>
@@ -92,32 +92,32 @@ function RegisterForm() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', outline: 'none' }}
+                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '2px solid #cbd5e1', outline: 'none', background: 'white', color: 'black' }}
                         suppressHydrationWarning
                     />
                 </div>
-                <div style={{ marginBottom: '1rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>{t('password_label')}</label>
                     <input
                         type="password"
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         required
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', outline: 'none' }}
+                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '2px solid #cbd5e1', outline: 'none', background: 'white', color: 'black' }}
                         suppressHydrationWarning
                     />
                 </div>
 
                 {formData.role === 'RETAILER' && (
                     <>
-                        <div style={{ marginBottom: '1rem' }}>
+                        <div style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>{t('business_name')}</label>
                             <input
                                 type="text"
                                 value={formData.businessName}
                                 onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
                                 required
-                                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', outline: 'none' }}
+                                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '2px solid #cbd5e1', outline: 'none', background: 'white', color: 'black' }}
                                 suppressHydrationWarning
                             />
                         </div>
@@ -128,7 +128,7 @@ function RegisterForm() {
                                 value={formData.gstId}
                                 onChange={(e) => setFormData({ ...formData, gstId: e.target.value })}
                                 required
-                                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', outline: 'none' }}
+                                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '2px solid #cbd5e1', outline: 'none', background: 'white', color: 'black' }}
                                 suppressHydrationWarning
                             />
                         </div>
@@ -158,4 +158,3 @@ export default function RegisterPage() {
         </div>
     );
 }
-

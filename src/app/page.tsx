@@ -908,13 +908,18 @@ export default function FarmerFriendlyLanding() {
                     >
                         <CloseIcon size={24} color="black" />
                     </button>
-                    <div style={{ width: '100%', maxWidth: '1000px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div style={{ width: '100%', maxWidth: '1000px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)', background: '#000' }}>
                         <video
-                            src={playingVideo}
+                            key={playingVideo}
                             controls
                             autoPlay
-                            style={{ width: '100%', display: 'block' }}
-                        />
+                            playsInline
+                            preload="auto"
+                            style={{ width: '100%', display: 'block', maxHeight: '80vh' }}
+                        >
+                            <source src={playingVideo} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                 </div>
             )}
