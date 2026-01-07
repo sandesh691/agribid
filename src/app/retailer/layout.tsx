@@ -183,15 +183,16 @@ export default function RetailerLayout({
                                 {t('retailer_dashboard_header')}
                             </h1>
                             <h1 style={{
-                                fontSize: '1rem',
-                                fontWeight: '800',
+                                fontSize: '0.85rem',
+                                fontWeight: '900',
                                 color: '#1e293b',
                                 margin: 0,
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
-                                textOverflow: 'ellipsis'
+                                textOverflow: 'ellipsis',
+                                textAlign: 'center'
                             }} className="mobile-only-text">
-                                Retailer Hub
+                                {t('retailer_dashboard_header')}
                             </h1>
                         </div>
 

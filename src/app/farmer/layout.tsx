@@ -174,15 +174,16 @@ export default function FarmerLayout({
                                 {t('farmer_dashboard_header')}
                             </h1>
                             <h1 style={{
-                                fontSize: '1rem',
-                                fontWeight: '800',
+                                fontSize: '0.85rem',
+                                fontWeight: '900',
                                 color: '#1e293b',
                                 margin: 0,
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
-                                textOverflow: 'ellipsis'
+                                textOverflow: 'ellipsis',
+                                textAlign: 'center'
                             }} className="mobile-only-text">
-                                {t('farmer_dashboard_header').split(' ')[0]} Hub
+                                {t('farmer_dashboard_header')}
                             </h1>
                         </div>
 
