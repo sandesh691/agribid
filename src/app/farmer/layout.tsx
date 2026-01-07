@@ -136,32 +136,87 @@ export default function FarmerLayout({
             {/* Main Content */}
             <main style={{ flex: 1, padding: '1rem', paddingBottom: '80px', minWidth: 0 }}>
                 <header style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1rem',
-                    marginBottom: '2rem',
+                    marginBottom: '1.5rem',
                     background: 'white',
-                    padding: '1.25rem',
+                    padding: '0.75rem 1.25rem',
                     borderRadius: '16px',
-                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
+                    position: 'sticky',
+                    top: '1rem',
+                    zIndex: 900
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Link href="/" className="mobile-only" style={{ color: 'var(--primary-green)' }}>
-                                <Home size={20} />
-                            </Link>
-                            <h1 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{t('farmer_dashboard_header')}</h1>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                        {/* Left: Home Icon (Mobile Only) */}
+                        <Link href="/" className="mobile-only" style={{
+                            color: 'var(--primary-green)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '40px',
+                            height: '40px',
+                            background: '#f0fdf4',
+                            borderRadius: '12px'
+                        }}>
+                            <Home size={20} />
+                        </Link>
+
+                        {/* Center: Title (Auto-scaling on mobile) */}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <h1 style={{
+                                fontSize: '1.1rem',
+                                fontWeight: '800',
+                                color: '#1e293b',
+                                margin: 0,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }} className="desktop-only-text">
+                                {t('farmer_dashboard_header')}
+                            </h1>
+                            <h1 style={{
+                                fontSize: '1rem',
+                                fontWeight: '800',
+                                color: '#1e293b',
+                                margin: 0,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }} className="mobile-only-text">
+                                {t('farmer_dashboard_header').split(' ')[0]} Hub
+                            </h1>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+
+                        {/* Right: Actions */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <LanguageToggle />
-                            <form action="/api/auth/logout" method="POST" className="mobile-only">
-                                <button type="submit" style={{ background: 'transparent', border: 'none', color: '#ef4444', padding: '4px' }}>
+                            <form action="/api/auth/logout" method="POST" className="mobile-only" style={{ margin: 0 }}>
+                                <button type="submit" style={{
+                                    background: '#fef2f2',
+                                    border: 'none',
+                                    color: '#ef4444',
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer'
+                                }}>
                                     <LogOut size={20} />
                                 </button>
                             </form>
                         </div>
                     </div>
                 </header>
+
+                <style jsx>{`
+                    @media (min-width: 769px) {
+                        .mobile-only-text { display: none; }
+                    }
+                    @media (max-width: 768px) {
+                        .desktop-only-text { display: none; }
+                    }
+                `}</style>
 
                 <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                     {children}
