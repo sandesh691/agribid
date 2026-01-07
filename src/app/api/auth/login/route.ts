@@ -15,7 +15,7 @@ const verifyPassword = (password: string, storedHash: string) => {
     return timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(targetHash, 'hex'));
 };
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'agribid-secret-key-123456789');
+import { JWT_SECRET } from '@/lib/auth';
 
 export async function POST(request: Request) {
     try {

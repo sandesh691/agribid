@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'agribid-secret-key-123456789');
+import { JWT_SECRET } from '@/lib/auth';
 
 export async function GET() {
     const token = (await cookies()).get('agribid-session')?.value;
@@ -30,3 +30,4 @@ export async function GET() {
         return NextResponse.json({ error: 'Failed' }, { status: 500 });
     }
 }
+
