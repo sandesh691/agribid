@@ -12,12 +12,12 @@ export async function GET() {
 
         const { payload } = await jwtVerify(token, JWT_SECRET);
 
-        // Use raw query to bypass potential Prisma client type mismatch
         const userId = payload.userId as string;
-        const notifications = await prisma.$queryRawUnsafe(
-            `SELECT * FROM "Notification" WHERE "userId" = ? ORDER BY "createdAt" DESC LIMIT 20`,
-            userId
-        );
+        const notifications = await (prisma.notification as any).findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+            take: 20
+        });
 
         return NextResponse.json(notifications);
     } catch (error: any) {

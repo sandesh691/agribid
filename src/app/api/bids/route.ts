@@ -76,14 +76,18 @@ export async function POST(request: Request) {
         });
 
         // Create notification for the farmer
-        await (prisma.notification.create as any)({
-            data: {
-                userId: crop.farmer.userId,
-                title: 'New Bid Received! 📈',
-                message: `You received a new bid of ₹${pricePerKg}/kg for your ${crop.name}. Click to view details.`,
-                link: `/farmer/crops/${crop.id}`
-            }
-        });
+        try {
+            await (prisma as any).notification.create({
+                data: {
+                    userId: crop.farmer.userId,
+                    title: 'New Bid Received! 📈',
+                    message: `You received a new bid of ₹${pricePerKg}/kg for your ${crop.name}. Click to view details.`,
+                    link: `/farmer/crops/${crop.id}`
+                }
+            });
+        } catch (notifErr) {
+            console.error('[AgriBid] Failed to send bid notification to farmer:', notifErr);
+        }
 
         return NextResponse.json(bid);
     } catch (error: any) {
