@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { scryptSync, timingSafeEqual } from 'node:crypto';
-
 import { SignJWT } from 'jose';
 import { cookies } from 'next/headers';
+import { JWT_SECRET } from '@/lib/auth';
 
 const verifyPassword = (password: string, storedHash: string) => {
     if (!storedHash || !storedHash.includes(':')) {
@@ -14,8 +14,6 @@ const verifyPassword = (password: string, storedHash: string) => {
     const targetHash = scryptSync(password, salt, 64).toString('hex');
     return timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(targetHash, 'hex'));
 };
-
-import { JWT_SECRET } from '@/lib/auth';
 
 export async function POST(request: Request) {
     try {

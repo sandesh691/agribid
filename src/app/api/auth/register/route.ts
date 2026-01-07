@@ -69,7 +69,10 @@ export async function POST(request: Request) {
         console.log(`[AgriBid] Registration successful for ${email}`);
         return NextResponse.json({ message: 'User created successfully', userId: user.id });
     } catch (error: any) {
-        console.error('[AgriBid] Registration error:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        console.error('[AgriBid] Registration CRITICAL error:', error.message || error);
+        if (error.code === 'P2021') {
+            return NextResponse.json({ error: 'Database mismatch: Tables not found. Please run schema push.' }, { status: 500 });
+        }
+        return NextResponse.json({ error: `Internal server error: ${error.message || 'Unknown'}` }, { status: 500 });
     }
 }
