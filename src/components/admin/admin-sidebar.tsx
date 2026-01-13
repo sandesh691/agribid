@@ -27,7 +27,7 @@ export default function AdminSidebar() {
     const pathname = usePathname();
 
     return (
-        <aside style={{
+        <aside className="desktop-only" style={{
             width: '280px',
             background: 'white',
             borderRight: '1px solid #f1f5f9',

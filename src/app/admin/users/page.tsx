@@ -49,62 +49,143 @@ export default function UserModerationPage() {
 
     return (
         <div className="card">
-            <h2 style={{ marginBottom: '1.5rem' }}>User Moderation</h2>
+            <style jsx>{`
+                .mobile-users {
+                    display: none;
+                }
+                @media (max-width: 768px) {
+                    .desktop-table {
+                        display: none;
+                    }
+                    .mobile-users {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+                    .user-card {
+                        background: #f8fafc;
+                        padding: 1rem;
+                        border-radius: 12px;
+                        border: 1px solid #e2e8f0;
+                    }
+                    .user-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                        margin-bottom: 0.75rem;
+                    }
+                }
+            `}</style>
+
+            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.25rem', fontWeight: 800 }}>User Moderation</h2>
+
             {loading ? <p>Loading users...</p> : (
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                        <tr style={{ textAlign: 'left', borderBottom: '2px solid #eee' }}>
-                            <th style={{ padding: '1rem' }}>User / Role</th>
-                            <th style={{ padding: '1rem' }}>Verification</th>
-                            <th style={{ padding: '1rem' }}>Account Status</th>
-                            <th style={{ padding: '1rem' }}>Trust Score</th>
-                            <th style={{ padding: '1rem' }}>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <>
+                    <div className="desktop-table">
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                            <thead>
+                                <tr style={{ textAlign: 'left', borderBottom: '2px solid #f1f5f9' }}>
+                                    <th style={{ padding: '1rem', color: '#64748b', fontSize: '0.85rem' }}>User / Role</th>
+                                    <th style={{ padding: '1rem', color: '#64748b', fontSize: '0.85rem' }}>Verification</th>
+                                    <th style={{ padding: '1rem', color: '#64748b', fontSize: '0.85rem' }}>Account Status</th>
+                                    <th style={{ padding: '1rem', color: '#64748b', fontSize: '0.85rem' }}>Trust Score</th>
+                                    <th style={{ padding: '1rem', color: '#64748b', fontSize: '0.85rem' }}>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {users.map(user => (
+                                    <tr key={user.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                        <td style={{ padding: '1rem' }}>
+                                            <div style={{ fontWeight: 700, color: '#1e293b' }}>{user.email}</div>
+                                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>{user.role}</div>
+                                        </td>
+                                        <td style={{ padding: '1rem' }}>
+                                            {user.verified ? (
+                                                <span style={{ color: '#16a34a', fontWeight: 700, fontSize: '0.85rem' }}>✅ Verified</span>
+                                            ) : (
+                                                <button onClick={() => verifyUser(user.id)} className="btn-outline" style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', fontWeight: 700 }}>Verify Now</button>
+                                            )}
+                                        </td>
+                                        <td style={{ padding: '1rem' }}>
+                                            <span style={{
+                                                padding: '4px 10px',
+                                                borderRadius: '6px',
+                                                background: user.accountStatus === 'ACTIVE' ? '#f0fdf4' : '#fef2f2',
+                                                color: user.accountStatus === 'ACTIVE' ? '#16a34a' : '#ef4444',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 800
+                                            }}>
+                                                {user.accountStatus}
+                                            </span>
+                                        </td>
+                                        <td style={{ padding: '1rem', fontWeight: 700 }}>{user.trustScore}%</td>
+                                        <td style={{ padding: '1rem' }}>
+                                            <button
+                                                onClick={() => toggleStatus(user.id, user.accountStatus)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    color: user.accountStatus === 'ACTIVE' ? '#ef4444' : '#16a34a',
+                                                    cursor: 'pointer',
+                                                    fontWeight: 700,
+                                                    fontSize: '0.85rem'
+                                                }}
+                                            >
+                                                {user.accountStatus === 'ACTIVE' ? 'Suspend' : 'Activate'}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="mobile-users">
                         {users.map(user => (
-                            <tr key={user.id} style={{ borderBottom: '1px solid #eee' }}>
-                                <td style={{ padding: '1rem' }}>
-                                    <div style={{ fontWeight: 'bold' }}>{user.email}</div>
-                                    <div style={{ fontSize: '0.8rem', color: '#666' }}>{user.role}</div>
-                                </td>
-                                <td style={{ padding: '1rem' }}>
-                                    {user.verified ? (
-                                        <span style={{ color: 'var(--primary-green)', fontWeight: 'bold' }}>✅ Verified</span>
-                                    ) : (
-                                        <button onClick={() => verifyUser(user.id)} className="btn-outline" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>Verify Now</button>
-                                    )}
-                                </td>
-                                <td style={{ padding: '1rem' }}>
+                            <div key={user.id} className="user-card">
+                                <div className="user-header">
+                                    <div>
+                                        <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{user.email}</div>
+                                        <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 800, textTransform: 'uppercase' }}>{user.role}</div>
+                                    </div>
                                     <span style={{
-                                        padding: '4px 8px',
+                                        padding: '2px 8px',
                                         borderRadius: '4px',
-                                        background: user.accountStatus === 'ACTIVE' ? '#e8f5e9' : '#ffebee',
-                                        color: user.accountStatus === 'ACTIVE' ? '#2e7d32' : '#c62828',
-                                        fontSize: '0.8rem'
+                                        background: user.accountStatus === 'ACTIVE' ? '#f0fdf4' : '#fef2f2',
+                                        color: user.accountStatus === 'ACTIVE' ? '#16a34a' : '#ef4444',
+                                        fontSize: '0.65rem',
+                                        fontWeight: 800
                                     }}>
                                         {user.accountStatus}
                                     </span>
-                                </td>
-                                <td style={{ padding: '1rem' }}>{user.trustScore}%</td>
-                                <td style={{ padding: '1rem' }}>
-                                    <button
-                                        onClick={() => toggleStatus(user.id, user.accountStatus)}
-                                        style={{
-                                            background: 'none',
-                                            border: 'none',
-                                            color: user.accountStatus === 'ACTIVE' ? '#c62828' : '#2e7d32',
-                                            cursor: 'pointer',
-                                            textDecoration: 'underline'
-                                        }}
-                                    >
-                                        {user.accountStatus === 'ACTIVE' ? 'Suspend' : 'Activate'}
-                                    </button>
-                                </td>
-                            </tr>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+                                    <div style={{ fontSize: '0.85rem' }}>
+                                        {user.verified ? <span style={{ color: '#16a34a', fontWeight: 700 }}>✅ Verified</span> : <span style={{ color: '#64748b' }}>Unverified</span>}
+                                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Score: <b>{user.trustScore}%</b></div>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                        {!user.verified && <button onClick={() => verifyUser(user.id)} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#15803d', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 700 }}>Verify</button>}
+                                        <button
+                                            onClick={() => toggleStatus(user.id, user.accountStatus)}
+                                            style={{
+                                                padding: '4px 8px',
+                                                fontSize: '0.7rem',
+                                                background: user.accountStatus === 'ACTIVE' ? '#fef2f2' : '#f0fdf4',
+                                                color: user.accountStatus === 'ACTIVE' ? '#ef4444' : '#16a34a',
+                                                border: 'none',
+                                                borderRadius: '4px',
+                                                fontWeight: 800
+                                            }}
+                                        >
+                                            {user.accountStatus === 'ACTIVE' ? 'Suspend' : 'Activate'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         ))}
-                    </tbody>
-                </table>
+                    </div>
+                </>
             )}
         </div>
     );
