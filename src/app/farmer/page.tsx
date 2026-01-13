@@ -73,9 +73,9 @@ export default function FarmerDashboard() {
                         {t('farm_performance')}
                     </p>
                 </div>
-                <Link href="/farmer/crops/add" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.8rem 1.5rem', width: 'auto' }}>
+                <a href="/farmer/crops/add" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.8rem 1.5rem', width: 'auto', textDecoration: 'none' }}>
                     <Plus size={20} /> <span className="desktop-only">{t('list_new_crop')}</span><span className="mobile-only">{t('list_crop_btn')}</span>
-                </Link>
+                </a>
             </div>
 
             {/* Notifications Section */}

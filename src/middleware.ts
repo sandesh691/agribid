@@ -8,58 +8,41 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const token = request.cookies.get('agribid-session')?.value;
 
-    // 1. PUBLIC PATHS - Always allow
-    const isPublicPath = pathname === '/' ||
-        pathname.startsWith('/login') ||
-        pathname.startsWith('/register') ||
-        pathname.startsWith('/about') ||
-        pathname.startsWith('/terms') ||
-        pathname.startsWith('/privacy') ||
-        pathname.startsWith('/admin-setup') ||
-        pathname.startsWith('/api/auth');
+    const publicPaths = ['/login', '/register', '/about', '/terms', '/privacy', '/admin-setup', '/denied'];
+    const isPublicPath = pathname === '/' || publicPaths.some(p => pathname.startsWith(p));
 
-    if (isPublicPath) {
+    // Handle static assets and internal requests
+    if (pathname.startsWith('/_next') || pathname.includes('.') || pathname.startsWith('/api/auth')) {
         return NextResponse.next();
     }
 
-    // 2. UNAUTHORIZED CHECK
     if (!token) {
-        if (pathname.startsWith('/api/')) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        if (isPublicPath) return NextResponse.next();
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
     try {
-        const { payload } = await jwtVerify(token, JWT_SECRET);
+        const { payload } = await jwtVerify(token, JWT_SECRET, { clockTolerance: '5 minutes' });
         const userRole = payload.role as string;
 
-        // 3. ROLE-BASED AUTHORIZATION
-        if (pathname.startsWith('/farmer') && userRole !== 'FARMER') {
-            return NextResponse.redirect(new URL('/denied', request.url));
-        }
-        if (pathname.startsWith('/retailer') && userRole !== 'RETAILER') {
-            return NextResponse.redirect(new URL('/denied', request.url));
-        }
-        if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
-            return NextResponse.redirect(new URL('/denied', request.url));
+        if (pathname === '/login' || pathname === '/register') {
+            const dashboard = userRole === 'FARMER' ? '/farmer' : (userRole === 'RETAILER' ? '/retailer' : '/admin');
+            return NextResponse.redirect(new URL(dashboard, request.url));
         }
 
-        // 4. API AUTHORIZATION (Optional but safer)
-        if (pathname.startsWith('/api/crops') && userRole === 'RETAILER' && request.method === 'POST') {
-            // Example: prevent retailers from posting crops
-            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-        }
+        if (pathname.startsWith('/farmer') && userRole !== 'FARMER') return NextResponse.redirect(new URL('/denied', request.url));
+        if (pathname.startsWith('/retailer') && userRole !== 'RETAILER') return NextResponse.redirect(new URL('/denied', request.url));
+        if (pathname.startsWith('/admin') && userRole !== 'ADMIN') return NextResponse.redirect(new URL('/denied', request.url));
 
         const response = NextResponse.next();
-        response.headers.set('x-user-id', payload.userId as string);
+        response.headers.set('x-user-id', String(payload.userId));
         response.headers.set('x-user-role', userRole);
         return response;
-    } catch (error) {
-        if (pathname.startsWith('/api/')) {
-            return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
-        }
-        return NextResponse.redirect(new URL('/login', request.url));
+    } catch (err) {
+        if (isPublicPath) return NextResponse.next();
+        const response = NextResponse.redirect(new URL('/login', request.url));
+        response.cookies.delete('agribid-session');
+        return response;
     }
 }
 
