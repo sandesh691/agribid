@@ -663,3 +663,19 @@ a:not(.btn-primary):not(.btn-outline):not(.sidebar-link):not(.nav-link):not(.car
   filter: brightness(0.9);
   transition: all 0.2s ease;
 }
+
+/* Admin Portal Layout */
+.admin-main {
+  flex: 1;
+  padding: 1rem;
+  overflow-x: hidden;
+  padding-bottom: 90px;
+  background: var(--bg-alt);
+}
+
+@media (min-width: 769px) {
+  .admin-main {
+    padding: 2.5rem !important;
+    max-width: calc(100vw - 280px);
+  }
+}

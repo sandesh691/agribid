@@ -53,18 +53,7 @@ export default async function AdminLayout({
             </nav>
 
             {/* Admin Content */}
-            <main className="admin-main" style={{ flex: 1, padding: '1rem', overflowX: 'hidden', paddingBottom: '90px' }}>
-                <style jsx>{`
-                    .admin-main {
-                        margin-left: 0;
-                    }
-                    @media (min-width: 769px) {
-                        .admin-main {
-                            padding: 2rem !important;
-                            max-width: calc(100vw - 280px);
-                        }
-                    }
-                `}</style>
+            <main className="admin-main">
                 <header style={{
                     display: 'flex',
                     flexDirection: 'column',
