@@ -7,7 +7,7 @@ import { JWT_SECRET } from '@/lib/auth';
 export async function GET() {
     try {
         const cookieStore = await cookies();
-        const token = cookieStore.get('agribid-session')?.value;
+        const token = cookieStore.get('agribid_session_v3')?.value;
 
         if (!token) {
             return NextResponse.json({ authenticated: false }, { status: 200 });

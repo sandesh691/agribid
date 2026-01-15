@@ -10,7 +10,7 @@ export default async function AdminLayout({
     children: React.ReactNode;
 }) {
     const cookieStore = await cookies();
-    const sessionToken = cookieStore.get('agribid-session')?.value;
+    const sessionToken = cookieStore.get('agribid_session_v3')?.value;
 
     if (!sessionToken) {
         redirect('/login');

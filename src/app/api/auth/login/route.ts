@@ -42,16 +42,16 @@ export async function POST(request: Request) {
             email: user.email
         })
             .setProtectedHeader({ alg: 'HS256' })
-            .setExpirationTime('24h')
+            .setExpirationTime('7d')
             .sign(JWT_SECRET);
 
         const cookieStore = await cookies();
-        cookieStore.set('agribid-session', token, {
+        cookieStore.set('agribid_session_v3', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
             sameSite: 'lax',
             path: '/',
-            maxAge: 60 * 60 * 24, // 1 day
+            maxAge: 60 * 60 * 24 * 7, // 7 days
         });
 
         return NextResponse.json({

@@ -6,7 +6,7 @@ import { jwtVerify } from 'jose';
 import { JWT_SECRET } from '@/lib/auth';
 
 async function checkAdmin() {
-    const token = (await cookies()).get('agribid-session')?.value;
+    const token = (await cookies()).get('agribid_session_v3')?.value;
     if (!token) return null;
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);

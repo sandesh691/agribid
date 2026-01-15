@@ -6,7 +6,7 @@ import { JWT_SECRET } from '@/lib/auth';
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    const token = request.cookies.get('agribid-session')?.value;
+    const token = request.cookies.get('agribid_session_v3')?.value;
 
     const publicPaths = ['/login', '/register', '/about', '/terms', '/privacy', '/admin-setup', '/denied'];
     const isPublicPath = pathname === '/' || publicPaths.some(p => pathname.startsWith(p));
@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    if (!token) {
+    if (!token || token.length < 10) {
         if (isPublicPath) return NextResponse.next();
         return NextResponse.redirect(new URL('/login', request.url));
     }
@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
     } catch (err) {
         if (isPublicPath) return NextResponse.next();
         const response = NextResponse.redirect(new URL('/login', request.url));
-        response.cookies.delete('agribid-session');
+        response.cookies.delete('agribid_session_v3');
         return response;
     }
 }

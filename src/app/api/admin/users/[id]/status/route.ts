@@ -10,7 +10,7 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const token = (await cookies()).get('agribid-session')?.value;
+    const token = (await cookies()).get('agribid_session_v3')?.value;
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {

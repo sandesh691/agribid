@@ -32,9 +32,10 @@ export default function LoginPage() {
 
             if (res.ok) {
                 showToast(t('welcome_back'), 'success');
-                if (data.user.role === 'FARMER') router.push('/farmer');
-                else if (data.user.role === 'RETAILER') router.push('/retailer');
-                else if (data.user.role === 'ADMIN') router.push('/admin');
+                // Use window.location.href to force a full recharge and ensure cookies are picked up
+                if (data.user.role === 'FARMER') window.location.href = '/farmer';
+                else if (data.user.role === 'RETAILER') window.location.href = '/retailer';
+                else if (data.user.role === 'ADMIN') window.location.href = '/admin';
             } else {
                 const msg = data.error || 'Login failed';
                 setError(msg);

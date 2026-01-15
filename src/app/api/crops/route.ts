@@ -7,7 +7,7 @@ import { JWT_SECRET } from '@/lib/auth';
 
 export async function POST(request: Request) {
     try {
-        const token = (await cookies()).get('agribid-session')?.value;
+        const token = (await cookies()).get('agribid_session_v3')?.value;
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const { payload } = await jwtVerify(token, JWT_SECRET);
@@ -111,7 +111,7 @@ export async function GET(request: Request) {
         const sort = searchParams.get('sort') || 'endingSoon';
         const mine = searchParams.get('mine') === 'true';
 
-        const token = (await cookies()).get('agribid-session')?.value;
+        const token = (await cookies()).get('agribid_session_v3')?.value;
         const { payload } = token ? await jwtVerify(token, JWT_SECRET).catch(() => ({ payload: null })) : { payload: null };
 
         // Maintenance: Auto-reschedule/terminate expired BULK crops with no bids

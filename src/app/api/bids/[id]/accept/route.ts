@@ -11,7 +11,7 @@ export async function POST(
 ) {
     try {
         const { id: bidId } = await params;
-        const token = (await cookies()).get('agribid-session')?.value;
+        const token = (await cookies()).get('agribid_session_v3')?.value;
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const { payload } = await jwtVerify(token, JWT_SECRET);

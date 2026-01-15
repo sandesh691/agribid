@@ -7,7 +7,7 @@ import { JWT_SECRET } from '@/lib/auth';
 
 export async function GET() {
     try {
-        const token = (await cookies()).get('agribid-session')?.value;
+        const token = (await cookies()).get('agribid_session_v3')?.value;
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const { payload } = await jwtVerify(token, JWT_SECRET);
