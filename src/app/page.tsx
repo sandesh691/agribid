@@ -797,10 +797,10 @@ export default function FarmerFriendlyLanding() {
                             {language === 'hi' ? 'क्या आप तैयार हैं?' : (language === 'kn' ? 'ನೀವು ಸಿದ್ಧರಿದ್ದೀರಾ?' : 'Are you ready?')}
                         </h2>
                         <p style={{ fontSize: 'clamp(1rem, 3vw, 1.5rem)', opacity: 0.9, marginBottom: '2.5rem', maxWidth: '700px', margin: '0 auto 2.5rem' }}>
-                            {language === 'hi' ? 'आज ही एग्रीबिड से जुड़ें और अपनी मेहनत का फल पाएं।' : (language === 'kn' ? 'ಇಂದೇ AgriBid ಸೇರಿ ಮತ್ತು ನಿಮ್ಮ ಕಠಿಣ ಪರಿಶ್ರಮಕ್ಕೆ ಪ್ರತಿಫಲ ಪಡೆಯಿರಿ.' : 'Join AgriBid today and get the rewards for your hard work.')}
+                            {t('join_agribid_cta')}
                         </p>
                         <Link href="/register" className="btn-primary full-width-mobile" style={{ background: 'white', color: 'var(--primary-green)', padding: '1.25rem 3.5rem', fontSize: '1.25rem' }}>
-                            {language === 'hi' ? 'फ्री में रजिस्टर करें' : (language === 'kn' ? 'ಉಚಿತವಾಗಿ ನೋಂದಾಯಿಸಿ' : 'Register for Free')}
+                            {t('register_free')}
                         </Link>
                     </div>
                 </div>
@@ -821,9 +821,41 @@ export default function FarmerFriendlyLanding() {
                             border: '1px solid #cbd5e1',
                             boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
                         }}>
-                            <div style={{ width: '24px', height: '16px', background: 'linear-gradient(#FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #128807 66.6%)', borderRadius: '2px', border: '1px solid #e2e8f0' }} />
+                            <div style={{
+                                width: '24px',
+                                height: '16px',
+                                position: 'relative',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                borderRadius: '2px',
+                                overflow: 'hidden',
+                                border: '1px solid #e2e8f0'
+                            }}>
+                                <div style={{ flex: 1, background: '#FF9933' }} />
+                                <div style={{ flex: 1, background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <div style={{
+                                        width: '4px',
+                                        height: '4px',
+                                        borderRadius: '50%',
+                                        border: '1px solid #000080',
+                                        position: 'relative'
+                                    }}>
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            width: '1px',
+                                            height: '1px',
+                                            background: '#000080',
+                                            borderRadius: '50%'
+                                        }} />
+                                    </div>
+                                </div>
+                                <div style={{ flex: 1, background: '#138808' }} />
+                            </div>
                             <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#475569' }}>
-                                {language === 'hi' ? 'भारत सरकार द्वारा अनुमोदित' : (language === 'kn' ? 'ಭಾರತ ಸರ್ಕಾರದಿಂದ ಅನುಮೋದಿಸಲಾಗಿದೆ' : 'Approved by Indian Government')}
+                                {t('approved_gov')}
                             </span>
                         </div>
 
@@ -831,7 +863,7 @@ export default function FarmerFriendlyLanding() {
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
                             <div style={{ color: '#94a3b8', fontSize: '0.9rem', fontWeight: '500' }}>
-                                © 2026 AgriBid. {language === 'hi' ? 'सर्वाधिकार सुरक्षित' : (language === 'kn' ? 'ಎಲ್ಲಾ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ' : 'All Rights Reserved.')}
+                                © 2026 AgriBid. {t('all_rights_reserved')}
                             </div>
 
                             <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
@@ -848,11 +880,11 @@ export default function FarmerFriendlyLanding() {
                                     onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
                                     onMouseLeave={(e) => e.currentTarget.style.opacity = '0.4'}
                                 >
-                                    {language === 'hi' ? 'कर्मचारी लॉगिन' : (language === 'kn' ? 'ಸಿಬ್ಬಂದಿ ಲಾಗಿನ್' : 'STAFF ACCESS')}
+                                    {t('staff_access')}
                                 </Link>
                                 <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.9rem', color: '#64748b', fontWeight: '600' }}>
-                                    <Link href="/terms">{language === 'hi' ? 'नियम' : (language === 'kn' ? 'ನಿಯಮಗಳು' : 'Terms')}</Link>
-                                    <Link href="/privacy">{language === 'hi' ? 'गोपनीयता' : (language === 'kn' ? 'ಗೌಪ್ಯತೆ' : 'Privacy')}</Link>
+                                    <Link href="/terms">{t('terms_conditions')}</Link>
+                                    <Link href="/privacy">{t('privacy_policy')}</Link>
                                 </div>
                             </div>
                         </div>
