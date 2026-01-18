@@ -277,47 +277,52 @@ export default function AdminReportsPage() {
                         </div>
 
                         <div style={{ display: 'flex', gap: '1rem' }}>
-                            <button
-                                onClick={() => updateReportStatus(selectedReport.id, 'IN_PROGRESS')}
-                                disabled={updating}
-                                style={{
-                                    flex: 1,
-                                    padding: '1rem',
-                                    borderRadius: '12px',
-                                    border: 'none',
-                                    background: '#f59e0b',
-                                    color: 'white',
-                                    fontWeight: '800',
-                                    cursor: 'pointer',
-                                    fontSize: '1rem',
-                                    transition: 'all 0.2s',
-                                    boxShadow: '0 4px 6px -1px rgba(245, 158, 11, 0.2)'
-                                }}
-                                onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
-                                onMouseLeave={e => e.currentTarget.style.filter = 'none'}
-                            >
-                                {updating ? 'Updating...' : 'In Progress'}
-                            </button>
+                            {selectedReport.status !== 'RESOLVED' && (
+                                <button
+                                    onClick={() => updateReportStatus(selectedReport.id, 'IN_PROGRESS')}
+                                    disabled={updating}
+                                    style={{
+                                        flex: 1,
+                                        padding: '1rem',
+                                        borderRadius: '12px',
+                                        border: 'none',
+                                        background: '#f59e0b',
+                                        color: 'white',
+                                        fontWeight: '800',
+                                        cursor: 'pointer',
+                                        fontSize: '1rem',
+                                        transition: 'all 0.2s',
+                                        boxShadow: '0 4px 6px -1px rgba(245, 158, 11, 0.2)'
+                                    }}
+                                    onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
+                                    onMouseLeave={e => e.currentTarget.style.filter = 'none'}
+                                >
+                                    {updating ? 'Updating...' : 'In Progress'}
+                                </button>
+                            )}
                             <button
                                 onClick={() => updateReportStatus(selectedReport.id, 'RESOLVED')}
-                                disabled={updating}
+                                disabled={updating || selectedReport.status === 'RESOLVED'}
                                 style={{
                                     flex: 1,
                                     padding: '1rem',
                                     borderRadius: '12px',
                                     border: 'none',
-                                    background: 'var(--primary-green)',
+                                    background: selectedReport.status === 'RESOLVED' ? '#94a3b8' : 'var(--primary-green)',
                                     color: 'white',
                                     fontWeight: '800',
-                                    cursor: 'pointer',
+                                    cursor: selectedReport.status === 'RESOLVED' ? 'not-allowed' : 'pointer',
                                     fontSize: '1rem',
                                     transition: 'all 0.2s',
-                                    boxShadow: '0 4px 6px -1px rgba(21, 128, 61, 0.2)'
+                                    boxShadow: selectedReport.status === 'RESOLVED' ? 'none' : '0 4px 6px -1px rgba(21, 128, 61, 0.2)',
+                                    opacity: selectedReport.status === 'RESOLVED' ? 0.7 : 1
                                 }}
-                                onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
+                                onMouseEnter={e => {
+                                    if (selectedReport.status !== 'RESOLVED') e.currentTarget.style.filter = 'brightness(1.1)';
+                                }}
                                 onMouseLeave={e => e.currentTarget.style.filter = 'none'}
                             >
-                                {updating ? 'Updating...' : 'Mark Resolved'}
+                                {selectedReport.status === 'RESOLVED' ? 'Report Resolved' : (updating ? 'Updating...' : 'Mark Resolved')}
                             </button>
                         </div>
                     </div>

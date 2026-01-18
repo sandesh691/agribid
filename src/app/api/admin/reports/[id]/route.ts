@@ -19,6 +19,12 @@ export async function PATCH(
 
         const { status, adminNote } = await request.json();
 
+        // Prevent changing status back if already RESOLVED
+        const currentReport = await prisma.report.findUnique({ where: { id } });
+        if (currentReport?.status === 'RESOLVED' && status !== 'RESOLVED') {
+            return NextResponse.json({ error: 'Cannot change status of a resolved report' }, { status: 400 });
+        }
+
         const report = await prisma.report.update({
             where: { id },
             data: {
