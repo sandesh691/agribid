@@ -172,65 +172,157 @@ export default function AdminReportsPage() {
                         </div>
                     </>
                 )}
+            </div>
 
-                {selectedReport && (
-                    <div style={{
-                        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                        background: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 2000,
-                        padding: '1rem'
+            {selectedReport && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(0,0,0,0.7)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 9999,
+                    padding: '20px',
+                    backdropFilter: 'blur(4px)'
+                }}>
+                    <div className="card animate-up" style={{
+                        width: '100%',
+                        maxWidth: '600px',
+                        maxHeight: '85vh',
+                        overflowY: 'auto',
+                        padding: '2rem',
+                        position: 'relative',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                        border: '1px solid rgba(255,255,255,0.1)'
                     }}>
-                        <div className="card animate-up" style={{ width: '100%', maxWidth: '550px', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem', position: 'relative' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>Report Details</h3>
-                                <button onClick={() => setSelectedReport(null)} style={{ border: 'none', background: '#f1f5f9', cursor: 'pointer', fontSize: '1.2rem', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>&times;</button>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: '#1e293b' }}>Report Details</h3>
+                            <button
+                                onClick={() => setSelectedReport(null)}
+                                style={{
+                                    border: 'none',
+                                    background: '#f1f5f9',
+                                    cursor: 'pointer',
+                                    fontSize: '1.5rem',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: '#64748b',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.background = '#e2e8f0'}
+                                onMouseLeave={e => e.currentTarget.style.background = '#f1f5f9'}
+                            >
+                                &times;
+                            </button>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+                            <div style={{ fontSize: '0.95rem' }}>
+                                <strong style={{ color: '#64748b' }}>From:</strong>
+                                <span style={{ marginLeft: '8px', fontWeight: 600 }}>{selectedReport.user.email}</span>
+                                <span style={{ marginLeft: '8px', fontSize: '0.8rem', padding: '2px 6px', background: '#e2e8f0', borderRadius: '4px', color: '#475569' }}>{selectedReport.user.role}</span>
+                            </div>
+                            <div style={{ fontSize: '0.95rem' }}>
+                                <strong style={{ color: '#64748b' }}>Type:</strong>
+                                <span style={{ marginLeft: '8px', color: 'var(--primary-green)', fontWeight: 800 }}>{selectedReport.type.split('_').join(' ')}</span>
+                            </div>
+                            <div style={{ fontSize: '0.95rem' }}>
+                                <strong style={{ color: '#64748b' }}>Subject:</strong>
+                                <span style={{ marginLeft: '8px', fontWeight: 600 }}>{selectedReport.subject}</span>
                             </div>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                                <div style={{ fontSize: '0.9rem' }}><strong>From:</strong> <span style={{ color: '#64748b' }}>{selectedReport.user.email} ({selectedReport.user.role})</span></div>
-                                <div style={{ fontSize: '0.9rem' }}><strong>Type:</strong> <span style={{ color: 'var(--primary-green)', fontWeight: 700 }}>{selectedReport.type.split('_').join(' ')}</span></div>
-                                <div style={{ fontSize: '0.9rem' }}><strong>Subject:</strong> {selectedReport.subject}</div>
-                                <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '12px', marginTop: '0.5rem', border: '1px solid #e2e8f0' }}>
-                                    <strong style={{ fontSize: '0.85rem', color: '#64748b', display: 'block', marginBottom: '0.5rem' }}>Description:</strong>
-                                    <p style={{ whiteSpace: 'pre-wrap', marginBottom: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>{selectedReport.description}</p>
-                                </div>
-                            </div>
-
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: '800', fontSize: '0.9rem' }}>Admin Note / Response</label>
-                                <textarea
-                                    className="full-width-mobile"
-                                    rows={4}
-                                    value={adminNote}
-                                    onChange={e => setAdminNote(e.target.value)}
-                                    placeholder="Add a response or internal note..."
-                                    style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: '0.95rem', outline: 'none' }}
-                                />
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <button
-                                    onClick={() => updateReportStatus(selectedReport.id, 'IN_PROGRESS')}
-                                    disabled={updating}
-                                    style={{ flex: 1, padding: '1rem', borderRadius: '12px', border: 'none', background: '#eab308', color: 'white', fontWeight: '800', cursor: 'pointer', fontSize: '0.9rem', transition: 'filter 0.2s' }}
-                                    onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
-                                    onMouseLeave={e => e.currentTarget.style.filter = 'none'}
-                                >
-                                    {updating ? 'Updating...' : 'In Progress'}
-                                </button>
-                                <button
-                                    onClick={() => updateReportStatus(selectedReport.id, 'RESOLVED')}
-                                    disabled={updating}
-                                    style={{ flex: 1, padding: '1rem', borderRadius: '12px', border: 'none', background: 'var(--primary-green)', color: 'white', fontWeight: '800', cursor: 'pointer', fontSize: '0.9rem', transition: 'filter 0.2s' }}
-                                    onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
-                                    onMouseLeave={e => e.currentTarget.style.filter = 'none'}
-                                >
-                                    {updating ? 'Updating...' : 'Mark Resolved'}
-                                </button>
+                            <div style={{
+                                background: '#f8fafc',
+                                padding: '1.5rem',
+                                borderRadius: '16px',
+                                marginTop: '0.5rem',
+                                border: '1px solid #e2e8f0',
+                                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
+                            }}>
+                                <strong style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</strong>
+                                <p style={{ whiteSpace: 'pre-wrap', marginBottom: 0, fontSize: '1rem', lineHeight: '1.6', color: '#334155' }}>{selectedReport.description}</p>
                             </div>
                         </div>
+
+                        <div style={{ marginBottom: '2rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: '800', fontSize: '0.9rem', color: '#475569' }}>Admin Note / Response</label>
+                            <textarea
+                                className="full-width-mobile"
+                                rows={4}
+                                value={adminNote}
+                                onChange={e => setAdminNote(e.target.value)}
+                                placeholder="Add a response or internal note for this report..."
+                                style={{
+                                    width: '100%',
+                                    padding: '1rem',
+                                    borderRadius: '12px',
+                                    border: '1px solid #cbd5e1',
+                                    background: 'white',
+                                    fontSize: '1rem',
+                                    outline: 'none',
+                                    transition: 'border-color 0.2s',
+                                    fontFamily: 'inherit'
+                                }}
+                                onFocus={e => e.currentTarget.style.borderColor = 'var(--primary-green)'}
+                                onBlur={e => e.currentTarget.style.borderColor = '#cbd5e1'}
+                            />
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            <button
+                                onClick={() => updateReportStatus(selectedReport.id, 'IN_PROGRESS')}
+                                disabled={updating}
+                                style={{
+                                    flex: 1,
+                                    padding: '1rem',
+                                    borderRadius: '12px',
+                                    border: 'none',
+                                    background: '#f59e0b',
+                                    color: 'white',
+                                    fontWeight: '800',
+                                    cursor: 'pointer',
+                                    fontSize: '1rem',
+                                    transition: 'all 0.2s',
+                                    boxShadow: '0 4px 6px -1px rgba(245, 158, 11, 0.2)'
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
+                                onMouseLeave={e => e.currentTarget.style.filter = 'none'}
+                            >
+                                {updating ? 'Updating...' : 'In Progress'}
+                            </button>
+                            <button
+                                onClick={() => updateReportStatus(selectedReport.id, 'RESOLVED')}
+                                disabled={updating}
+                                style={{
+                                    flex: 1,
+                                    padding: '1rem',
+                                    borderRadius: '12px',
+                                    border: 'none',
+                                    background: 'var(--primary-green)',
+                                    color: 'white',
+                                    fontWeight: '800',
+                                    cursor: 'pointer',
+                                    fontSize: '1rem',
+                                    transition: 'all 0.2s',
+                                    boxShadow: '0 4px 6px -1px rgba(21, 128, 61, 0.2)'
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
+                                onMouseLeave={e => e.currentTarget.style.filter = 'none'}
+                            >
+                                {updating ? 'Updating...' : 'Mark Resolved'}
+                            </button>
+                        </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -53,7 +53,7 @@ export default async function AdminLayout({
             </nav>
 
             {/* Admin Content */}
-            <main className="admin-main">
+            <main className="admin-main animate-fade">
                 <header style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -120,11 +120,8 @@ export default async function AdminLayout({
                     </div>
                 </header>
 
-                <div className="animate-fade">
-                    {children}
-                </div>
+                {children}
             </main>
         </div>
     );
 }
-
